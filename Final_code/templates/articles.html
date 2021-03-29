@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0"> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+        <style>
+            h2{
+                font-family: 'Roboto', sans-serif;
+            }
+            h2:hover{
+                color:red;
+            }
+            p{
+                font-family: 'Roboto', sans-serif;
+            }
+            h1{
+                text-align: center;
+                font-size:3.5rem;
+                font-family: 'Roboto', sans-serif;
+                color: #0336ff;
+
+            }
+        </style>
+    </head>
+    <body>
+        <h1>JakasNewsWala</h1>
+
+        {% for article in articles %}
+        <h2 onclick='get_article({{article["Unnamed: 0"]}})'>{{ article.Title }}</h2>
+        <p>{{ article.Article }}</p>
+        {% endfor %}
+        <script>
+            window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted || 
+                                    ( typeof window.performance != "undefined" && 
+                                        window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                // Handle page restore.
+                window.location.reload();
+                  }
+            });
+            
+            function get_article(art_id){
+                console.log(art_id);
+                $.ajax({
+                type: "POST",
+                url: "{{ url_for('article')}}",
+                contentType: "application/json",
+                data: JSON.stringify({article:art_id.toString()}),
+                dataType: "json",
+                });
+                setTimeout(()=>{window.location.href='{{url_for("article")}}'},300)    
+            }
+        </script>
+    </body>
+</html>
